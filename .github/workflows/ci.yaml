@@ -1,7 +1,10 @@
 name: CI
 on:
   pull_request_target:
-    branches: ['master', 'release/**']
+    types:
+      - opened
+      - synchronize
+      - reopened
   push:
     branches: ['master']
 
@@ -14,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Checkout submodule
         uses: Mushus/checkout-submodule@v1.0.1
@@ -40,5 +43,9 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Generating image tag
+        id: runtime-tag
+        run: |
+          echo tag="$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - run: make tidy
-      - run: SHORT_VERSION="dev" bash ./hack/build.sh
+      - run: bash ./hack/build.sh
