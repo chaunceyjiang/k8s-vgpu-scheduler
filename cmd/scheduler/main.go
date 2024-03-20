@@ -73,6 +73,7 @@ func start() {
 
 	// start http server
 	router := httprouter.New()
+	// router.GET("/metrics", promhttp.Handler().ServeHTTP)
 	router.POST("/filter", routes.PredicateRoute(sher))
 	router.POST("/bind", routes.Bind(sher))
 	router.POST("/webhook", routes.WebHookRoute())
