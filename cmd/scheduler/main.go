@@ -73,8 +73,9 @@ func start() {
 
 	// start http server
 	router := httprouter.New()
-	// router.GET("/metrics", promhttp.Handler().ServeHTTP)
+	// router.GET("/metrics", promhttp.Handler().ServeHTTP)xx
 	router.POST("/filter", routes.PredicateRoute(sher))
+	// router.GET("/metrics", promhttp.Handler().ServeHTTP)
 	router.POST("/bind", routes.Bind(sher))
 	router.POST("/webhook", routes.WebHookRoute())
 	klog.Info("listen on ", config.HttpBind)
